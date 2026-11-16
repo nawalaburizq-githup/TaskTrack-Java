@@ -1,0 +1,19 @@
+# Compiled Java output
+out/
+*.class
+
+# Packaged files
+*.jar
+*.log
+
+# IDE / editor files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local environment files
+.env
