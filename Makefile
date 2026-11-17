@@ -23,4 +23,3 @@ health:
 clean:
 	-docker rm -f $(CONTAINER)
 	-docker rmi $(IMAGE)
-	
