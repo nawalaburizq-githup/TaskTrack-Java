@@ -72,7 +72,42 @@ http://localhost:8080
 
 هيك بنقدر نفتح التطبيق من المتصفح ونجربه.
 
-## الفحص التلقائي للمشروع
+### Run with Docker Compose | التشغيل باستخدام Docker Compose
+
+`docker compose up -d --build`
+
+To stop it:
+
+`docker compose down`
+
+**Note:** Stop `tasktrack-container` first, because both use port 8080.
+
+بدل ما نكتب أوامر الـBuild والـRun كل مرة، بنقدر نشغّل المشروع بأمر واحد عن طريق Docker Compose.
+
+### Makefile Commands | أوامر مختصرة
+
+You need `make` to use these commands (on Windows you can use Git Bash or WSL).
+
+- `make build`: Build the Docker image.
+- `make run`: Run the container on port 8080.
+- `make health`: Check the health endpoint.
+- `make logs`: Show the container logs.
+- `make stop`: Stop and remove the container.
+- `make clean`: Remove the container and the image.
+
+ضفت Makefile عشان أسهّل تشغيل المشروع، بحيث كل أمر طويل صار إله اختصار بسيط.
+
+### Dockerfile Details | تفاصيل الـDockerfile
+
+- **Multi-stage build:** The first stage compiles the code using the JDK, and the second stage runs it using the JRE only, so the final image is smaller.
+- **Healthcheck:** Docker checks `/health` every 30 seconds. You can see the status with `docker ps`.
+- **Non-root user:** The application runs as a normal user called `app`.
+
+الـDockerfile مقسوم لمرحلتين: الأولى بتعمل Compile للكود، والثانية بتشغّله بصورة أصغر. وDocker بفحص التطبيق كل 30 ثانية، وبتظهر كلمة healthy لما يكون شغّال تمام.
+
+### GitHub Actions | الفحص التلقائي للمشروع
+
+Every push or pull request to `main` builds the Docker image, runs the container, and tests the home page and `/health`.
 
 تم إضافة فحص تلقائي للمشروع للتأكد من إنه بشتغل بشكل صحيح بعد رفع أي تعديلات على المستودع. ببدأ الفحص بجلب ملفات المشروع، وبعدها ببني صورة التطبيق وبشغّله داخل حاوية، وبعدين بتأكد من عمل الصفحة الرئيسية وصفحة فحص الحالة. إذا نجحت جميع الخطوات، بتظهر علامة صح خضرا بتوضح نجاح الفحص، وبالنهاية بتم إيقاف الحاوية وحذفها.
 
@@ -121,13 +156,16 @@ http://localhost:8080/health
 
 ## 9. Project Structure | ملفات المشروع
 
-- `src/Main.java` — Java application code.
-- `Dockerfile` — Docker build instructions.
-- `.dockerignore` — Files excluded from Docker build.
-- `.gitignore` — Files excluded from Git.
-- `README.md` — Project documentation.
-- `docs/notes.md` — Technical notes.
-- `docs/screenshots/` — Assignment screenshots.
+- `src/Main.java`: Java application code.
+- `Dockerfile`: Docker build instructions.
+- `docker-compose.yml`: Docker Compose file.
+- `Makefile`: Short commands for Docker.
+- `.dockerignore`: Files excluded from Docker build.
+- `.gitignore`: Files excluded from Git.
+- `.github/workflows/docker-ci.yml`: GitHub Actions workflow.
+- `README.md`: Project documentation.
+- `docs/notes.md`: Technical notes.
+- `docs/screenshots/`: Assignment screenshots.
 
 كل ملف إله وظيفة معينة، وهيك المشروع بيكون مرتب وسهل لأي شخص يفتحه ويفهمه.
 
